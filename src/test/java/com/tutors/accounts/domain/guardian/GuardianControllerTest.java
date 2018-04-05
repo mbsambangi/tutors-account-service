@@ -1,7 +1,7 @@
 package com.tutors.accounts.domain.guardian;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tutors.accounts.api.GuardianController.GuardianController;
+import com.tutors.accounts.api.GuardianController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class GuardianControllerTest {
     public void getGurdianReturnGuardian() throws Exception {
         given(guardianService.getGuardian(anyString())).willReturn(new Guardian("Madhu", "Sambangi"));
         
-        mockMvc.perform(get("/api/v1/guardians")).andExpect(status().isOk())
+        mockMvc.perform(get("/api/v1/guardians/Madhu")).andExpect(status().isOk())
         .andExpect(jsonPath("firstName").value("Madhu"));
     }
 
