@@ -5,6 +5,7 @@ import com.tutors.accounts.api.GuardianController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -13,11 +14,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@AutoConfigureRestDocs(outputDir = "target/generated-snippets")
 @RunWith(SpringRunner.class)
 @WebMvcTest(GuardianController.class)
 public class GuardianControllerTest {
@@ -33,9 +36,9 @@ public class GuardianControllerTest {
     @Test
     public void getGurdianReturnGuardian() throws Exception {
         given(guardianService.getGuardian(anyString())).willReturn(new Guardian("Madhu", "Sambangi"));
-        
+
         mockMvc.perform(get("/api/v1/guardians/Madhu")).andExpect(status().isOk())
-        .andExpect(jsonPath("firstName").value("Madhu"));
+                .andExpect(jsonPath("firstName").value("Madhu")).andDo(document("get-guardian-example"));
     }
 
     @Test
@@ -45,8 +48,8 @@ public class GuardianControllerTest {
 
         mockMvc.perform(post("/api/v1/guardians")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-        .content(objectMapper.writeValueAsString(guardianIn))
-        .accept(MediaType.APPLICATION_JSON_UTF8)).andExpect(status().isOk())
+                .content(objectMapper.writeValueAsString(guardianIn))
+                .accept(MediaType.APPLICATION_JSON_UTF8)).andExpect(status().isOk())
                 .andExpect(jsonPath("firstName").value("Madhu"));
     }
 
